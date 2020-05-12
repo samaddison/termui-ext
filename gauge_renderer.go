@@ -8,12 +8,12 @@ type GaugeRenderer struct {
 	Gauge Gauge
 }
 
-type GaugeData struct {
+type gaugeData struct {
 	Percent int
 }
 
-func processWidgetData(data *WidgetData) (*GaugeData, error) {
-	var gaugeData = GaugeData{}
+func processWidgetData(data *WidgetData) (*gaugeData, error) {
+	var gaugeData = gaugeData{}
 	err := json.Unmarshal(data.Json, &gaugeData)
 	if err != nil {
 		return nil, err

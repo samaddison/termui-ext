@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
+	"image"
 	"log"
 	"math"
 	termui_ext "termui-ext"
@@ -11,10 +12,158 @@ import (
 )
 
 func main() {
-	mainMine()
+	//mainBarChart()
+	mainSparkline()
 }
 
-func mainMine() {
+func mainSparkline() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/sparkline_input.json"}
+
+	sparklineGroup := termui_ext.NewSparklineGroup(dataProvider)
+	sparklineGroup.Title = "Pie Chart"
+	sparklineGroup.SetRect(5, 5, 100, 25)
+
+	// The following call to Render cannot be done at this point because
+	// there are no sparklines associated to the group and the library doesn't handle that very well.
+	//ui.Render(sparklineGroup)
+
+	go sparklineGroup.Refresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+}
+
+func mainPlot() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/plot_input.json"}
+
+	plot := termui_ext.NewPlot(dataProvider)
+	plot.Title = "Pie Chart"
+	plot.SetRect(5, 5, 100, 25)
+	plot.AxesColor = ui.ColorWhite
+	plot.LineColors[0] = ui.ColorGreen
+	plot.Marker = widgets.MarkerBraille
+	plot.PlotType = widgets.ScatterPlot
+
+	ui.Render(plot)
+
+	go plot.Refresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+}
+
+func mainPieChart() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/piechart_input.json"}
+
+	bc := termui_ext.NewPieChart(dataProvider)
+	bc.Title = "Pie Chart"
+	bc.SetRect(5, 5, 100, 25)
+	bc.AngleOffset = -.5 * math.Pi
+	bc.LabelFormatter = func(i int, v float64) string {
+		return fmt.Sprintf("%.02f", v)
+	}
+
+	ui.Render(bc)
+
+	go bc.Refresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+}
+
+func mainParagraph() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/paragraph_input.json"}
+
+	bc := termui_ext.NewParagraph(dataProvider)
+	bc.Title = "Paragraph Title"
+	bc.SetRect(5, 5, 100, 25)
+
+	bc.BorderStyle.Fg = ui.ColorYellow
+
+	ui.Render(bc)
+
+	go bc.Refresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+
+}
+
+func mainBarchart() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/barchart_input.json"}
+
+	bc := termui_ext.NewBarChart(dataProvider)
+	bc.Title = "Bar Chart"
+	bc.SetRect(5, 5, 100, 25)
+	bc.BarWidth = 5
+	bc.BarColors = []ui.Color{ui.ColorRed, ui.ColorGreen}
+	bc.LabelStyles = []ui.Style{ui.NewStyle(ui.ColorBlue)}
+	bc.NumStyles = []ui.Style{ui.NewStyle(ui.ColorYellow)}
+
+	ui.Render(bc)
+
+	go bc.Refresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+}
+
+func mainGauge() {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize termui: %v", err)
 	}
@@ -31,7 +180,7 @@ func mainMine() {
 
 	ui.Render(gauge)
 
-	go gauge.Refresh(5*time.Second)
+	go gauge.Refresh(5 * time.Second)
 
 	uiEvents := ui.PollEvents()
 	for {
@@ -50,55 +199,18 @@ func main2() {
 	}
 	defer ui.Close()
 
-	g0 := widgets.NewGauge()
-	g0.Title = "Slim Gauge"
-	g0.SetRect(20, 20, 30, 30)
-	g0.Percent = 75
-	g0.BarColor = ui.ColorRed
-	g0.BorderStyle.Fg = ui.ColorWhite
-	g0.TitleStyle.Fg = ui.ColorCyan
+	c := ui.NewCanvas()
+	c.SetRect(0, 0, 50, 50)
+	c.SetLine(image.Pt(0, 0), image.Pt(10, 20), ui.ColorWhite)
 
-	g2 := widgets.NewGauge()
-	g2.Title = "Slim Gauge"
-	g2.SetRect(0, 3, 50, 6)
-	g2.Percent = 60
-	g2.BarColor = ui.ColorYellow
-	g2.LabelStyle = ui.NewStyle(ui.ColorBlue)
-	g2.BorderStyle.Fg = ui.ColorWhite
+	ui.Render(c)
 
-	g1 := widgets.NewGauge()
-	g1.Title = "Big Gauge"
-	g1.SetRect(0, 6, 50, 11)
-	g1.Percent = 30
-	g1.BarColor = ui.ColorGreen
-	g1.LabelStyle = ui.NewStyle(ui.ColorYellow)
-	g1.TitleStyle.Fg = ui.ColorMagenta
-	g1.BorderStyle.Fg = ui.ColorWhite
-
-	g3 := widgets.NewGauge()
-	g3.Title = "Gauge with custom label"
-	g3.SetRect(0, 11, 50, 14)
-	g3.Percent = 50
-	g3.Label = fmt.Sprintf("%v%% (100MBs free)", g3.Percent)
-
-	g4 := widgets.NewGauge()
-	g4.Title = "Gauge"
-	g4.SetRect(0, 14, 50, 17)
-	g4.Percent = 50
-	g4.Label = "Gauge with custom highlighted label"
-	g4.BarColor = ui.ColorGreen
-	g4.LabelStyle = ui.NewStyle(ui.ColorYellow)
-
-	ui.Render(g0, g1, g2, g3, g4)
-
-	uiEvents := ui.PollEvents()
-	for {
-		e := <-uiEvents
-		switch e.ID {
-		case "q", "<C-c>":
-			return
+	for e := range ui.PollEvents() {
+		if e.Type == ui.KeyboardEvent {
+			break
 		}
 	}
+
 }
 
 func main3() {
@@ -122,7 +234,7 @@ func main3() {
 	sl.TitleStyle.Fg = ui.ColorWhite
 
 	slg := widgets.NewSparklineGroup(sl)
-	slg.Title = "Sparkline"
+	slg.Title = "SparklineGroup"
 
 	lc := widgets.NewPlot()
 	lc.Title = "braille-mode Line Chart"
