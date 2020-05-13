@@ -25,6 +25,6 @@ func (dp File) Retrieve() (*WidgetData, error) {
 	}
 }
 
-func (dp File) PostRetrieve(*WidgetData, error) error{
+func (dp File) PostRetrieve(*WidgetData, error) error {
 	return nil
 }

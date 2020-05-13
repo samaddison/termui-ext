@@ -12,67 +12,179 @@ import (
 )
 
 func main() {
-	//mainBarChart()
-	mainTabs()
+	mainStackedBarchart()
 }
 
-func mainTabs() {
+func mainImage() {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize termui: %v", err)
 	}
 	defer ui.Close()
 
-	header := widgets.NewParagraph()
-	header.Text = "Press q to quit, Press h or l to switch tabs"
-	header.SetRect(0, 0, 50, 1)
-	header.Border = false
-	header.TextStyle.Bg = ui.ColorBlue
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/image_input.json"}
 
-	p2 := widgets.NewParagraph()
-	p2.Text = "Press q to quit\nPress h or l to switch tabs\n"
-	p2.Title = "Keys"
-	p2.SetRect(5, 5, 40, 15)
-	p2.BorderStyle.Fg = ui.ColorYellow
+	imageWidget := termui_ext.NewImage(dataProvider)
+	imageWidget.Title = "This is the title"
+	imageWidget.SetRect(0, 0, 100, 50)
 
-	bc := widgets.NewBarChart()
-	bc.Title = "Bar Chart"
-	bc.Data = []float64{3, 2, 5, 3, 9, 5, 3, 2, 5, 8, 3, 2, 4, 5, 3, 2, 5, 7, 5, 3, 2, 6, 7, 4, 6, 3, 6, 7, 8, 3, 6, 4, 5, 3, 2, 4, 6, 4, 8, 5, 9, 4, 3, 6, 5, 3, 6}
-	bc.SetRect(5, 5, 35, 10)
-	bc.Labels = []string{"S0", "S1", "S2", "S3", "S4", "S5"}
+	ui.Render(imageWidget)
 
-	tabpane := widgets.NewTabPane("pierwszy", "drugi", "trzeci", "żółw", "four", "five")
-	tabpane.SetRect(0, 1, 50, 4)
-	tabpane.Border = true
-
-	renderTab := func() {
-		switch tabpane.ActiveTabIndex {
-		case 0:
-			ui.Render(p2)
-		case 1:
-			ui.Render(bc)
-		}
-	}
-
-	ui.Render(header, tabpane, p2)
+	go imageWidget.Refresh(3 * time.Second)
 
 	uiEvents := ui.PollEvents()
-
 	for {
 		e := <-uiEvents
 		switch e.ID {
 		case "q", "<C-c>":
 			return
-		case "h":
-			tabpane.FocusLeft()
-			ui.Clear()
-			ui.Render(header, tabpane)
-			renderTab()
-		case "l":
-			tabpane.FocusRight()
-			ui.Clear()
-			ui.Render(header, tabpane)
-			renderTab()
 		}
+	}
+}
+
+func mainTable() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "/Users/samaddison/GolandProjects/termui-ext/docs/table_input.json"}
+
+	table1 := termui_ext.NewTable(dataProvider)
+	table1.RowSeparator = true
+	table1.BorderStyle = ui.NewStyle(ui.ColorGreen)
+	table1.SetRect(5, 5, 100, 25)
+	table1.TextStyle = ui.NewStyle(ui.ColorWhite)
+	table1.SetRect(0, 0, 60, 10)
+
+	//ui.Render(table1)
+
+	go table1.Refresh(3 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		}
+	}
+}
+
+type nodeValue string
+
+func (nv nodeValue) String() string {
+	return string(nv)
+}
+
+func mainTree() {
+
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	nodes := []*widgets.TreeNode{
+		{
+			Value: nodeValue("Key 1"),
+			Nodes: []*widgets.TreeNode{
+				{
+					Value: nodeValue("Key 1.1"),
+					Nodes: []*widgets.TreeNode{
+						{
+							Value: nodeValue("Key 1.1.1"),
+							Nodes: nil,
+						},
+						{
+							Value: nodeValue("Key 1.1.2"),
+							Nodes: nil,
+						},
+					},
+				},
+				{
+					Value: nodeValue("Key 1.2"),
+					Nodes: nil,
+				},
+			},
+		},
+		{
+			Value: nodeValue("Key 2"),
+			Nodes: []*widgets.TreeNode{
+				{
+					Value: nodeValue("Key 2.1"),
+					Nodes: nil,
+				},
+				{
+					Value: nodeValue("Key 2.2"),
+					Nodes: nil,
+				},
+				{
+					Value: nodeValue("Key 2.3"),
+					Nodes: nil,
+				},
+			},
+		},
+		{
+			Value: nodeValue("Key 3"),
+			Nodes: nil,
+		},
+	}
+
+	l := widgets.NewTree()
+	l.TextStyle = ui.NewStyle(ui.ColorYellow)
+	l.WrapText = false
+	l.SetNodes(nodes)
+
+	x, y := ui.TerminalDimensions()
+
+	l.SetRect(0, 0, x, y)
+
+	ui.Render(l)
+
+	previousKey := ""
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		case "j", "<Down>":
+			l.ScrollDown()
+		case "k", "<Up>":
+			l.ScrollUp()
+		case "<C-d>":
+			l.ScrollHalfPageDown()
+		case "<C-u>":
+			l.ScrollHalfPageUp()
+		case "<C-f>":
+			l.ScrollPageDown()
+		case "<C-b>":
+			l.ScrollPageUp()
+		case "g":
+			if previousKey == "g" {
+				l.ScrollTop()
+			}
+		case "<Home>":
+			l.ScrollTop()
+		case "<Enter>":
+			l.ToggleExpand()
+		case "G", "<End>":
+			l.ScrollBottom()
+		case "E":
+			l.ExpandAll()
+		case "C":
+			l.CollapseAll()
+		case "<Resize>":
+			x, y := ui.TerminalDimensions()
+			l.SetRect(0, 0, x, y)
+		}
+
+		if previousKey == "g" {
+			previousKey = ""
+		} else {
+			previousKey = e.ID
+		}
+
+		ui.Render(l)
 	}
 }
 
@@ -94,7 +206,7 @@ func mainStackedBarchart() {
 
 	ui.Render(bc)
 
-	go bc.Refresh(5 * time.Second)
+	bc.GoroutineRefresh(5 * time.Second)
 
 	uiEvents := ui.PollEvents()
 	for {
@@ -102,6 +214,8 @@ func mainStackedBarchart() {
 		switch e.ID {
 		case "q", "<C-c>":
 			return
+		case "<C-d>":
+			bc.Shutdown()
 		}
 	}
 }
