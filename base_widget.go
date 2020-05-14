@@ -17,8 +17,12 @@ func (widget *BaseWidget) Refresh(d time.Duration) {
 	doEvery(widget, d, widget.internalRefresh)
 }
 
-func (widget *BaseWidget) GoroutineRefresh(d time.Duration) {
+func (widget *BaseWidget) GoRefresh(d time.Duration) {
 	go doEvery(widget, d, widget.internalRefresh)
+}
+
+func (widget *BaseWidget) OneRefresh() {
+	widget.internalRefresh()
 }
 
 func doEvery(widget *BaseWidget, d time.Duration, f func()) {

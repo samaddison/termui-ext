@@ -206,7 +206,7 @@ func mainStackedBarchart() {
 
 	ui.Render(bc)
 
-	bc.GoroutineRefresh(5 * time.Second)
+	bc.GoRefresh(5 * time.Second)
 
 	uiEvents := ui.PollEvents()
 	for {

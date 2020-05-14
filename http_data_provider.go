@@ -15,7 +15,7 @@ func (dp HTTP) PreRetrieve() {
 }
 
 func (dp HTTP) Retrieve() (*WidgetData, error) {
-	resp, err := http.Get("http://example.com/")
+	resp, err := http.Get(dp.Url)
 	if err != nil {
 		return nil, err
 	} else {
