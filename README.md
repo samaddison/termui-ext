@@ -1,6 +1,24 @@
-#termui-ext
+# termui-ext
 
-The termui-ext is an extension of the termui library. It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
+termui-ext is an extension of the termui library. It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
+
+Quick example:
+
+`dataProvider := termui_ext.File{Path: "./termui-ext/docs/stacked_barchart_input.json"}
+
+	bc := termui_ext.NewStackedBarChart(dataProvider)
+	bc.Title = "Stacked Bar Chart"
+	bc.SetRect(5, 5, 100, 25)
+	bc.BarWidth = 5
+	bc.BarColors = []ui.Color{ui.ColorRed, ui.ColorGreen}
+	bc.LabelStyles = []ui.Style{ui.NewStyle(ui.ColorBlue)}
+	bc.NumStyles = []ui.Style{ui.NewStyle(ui.ColorYellow)}
+
+	ui.Render(bc)
+
+	bc.GoRefresh(5 * time.Second)
+	
+As you can see, you can use the same API provided by the termui widgets, as the termui_ext widgets are essentially a wrapper around those. The only big differences are the call to GoRefresh, which configures the refresh rate, and the introduction of a data provider which needs to be passed in the constructor. 
 
 The library provides 2 data providers: an HTTP/S data provider and a File data provider. With the HTTP data provider, you can configure a url endpoint which the widgets will call periodically. The endpoint will return a JSON string whose format depends on the widget type.
 
