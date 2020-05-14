@@ -1,8 +1,8 @@
 package termui_ext
 
 import (
-	"fmt"
 	ui "github.com/gizak/termui/v3"
+	"log"
 	"time"
 )
 
@@ -40,28 +40,28 @@ func (widget *BaseWidget) Shutdown() {
 func (widget *BaseWidget) internalRefresh() {
 	err := widget.PreRetrieve()
 	if err != nil {
-		fmt.Print("Error: " + err.Error())
+		log.Print("Error: " + err.Error())
 		return
 	}
 	widgetData, err := widget.Retrieve()
 	err = widget.PostRetrieve(widgetData, err)
 	if err != nil {
-		fmt.Print("Error: " + err.Error())
+		log.Print("Error: " + err.Error())
 		return
 	}
 	err = widget.PreRender(widgetData)
 	if err != nil {
-		fmt.Print("Error: " + err.Error())
+		log.Print("Error: " + err.Error())
 		return
 	}
 	err = widget.Render(widgetData)
 	if err != nil {
-		fmt.Print("Error: " + err.Error())
+		log.Print("Error: " + err.Error())
 		return
 	}
 	err = widget.PostRender(widgetData)
 	if err != nil {
-		fmt.Print("Error: " + err.Error())
+		log.Print("Error: " + err.Error())
 		return
 	}
 	ui.Render(widget.Drawable)
