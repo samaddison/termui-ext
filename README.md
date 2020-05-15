@@ -1,6 +1,6 @@
 # termui-ext
 
-termui-ext is an extension of the termui library. It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
+termui-ext is an extension of the termui library (https://github.com/gizak/termui). It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
 
 # Installation
 
@@ -66,6 +66,9 @@ Renderers are less likely to change, but you can still create your own renderer 
 
 
 # Hooks
+
+# Licence
+MIT
 
 
 
