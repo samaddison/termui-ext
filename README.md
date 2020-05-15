@@ -2,9 +2,15 @@
 
 termui-ext is an extension of the termui library. It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
 
+# Installation
+
+To install this library, run the following:
+
+`go get -u github.com/samaddison/termui-ext`
+
 Quick example:
 
-`dataProvider := termui_ext.File{Path: "./termui-ext/docs/stacked_barchart_input.json"}
+    dataProvider := termui_ext.File{Path: "./termui-ext/docs/stacked_barchart_input.json"}
 
 	bc := termui_ext.NewStackedBarChart(dataProvider)
 	bc.Title = "Stacked Bar Chart"
@@ -39,9 +45,11 @@ Typically, widgets will run on its own goroutine. This allows you to set up the 
 
 However, you can also use the OneRefresh method which will refresh the widget just once. This allows you to take full control of the widgets.
 
+`bc.OneRefresh()`
+
 You can stop a widget at any time:
 
-`bcShutdown()`   
+`bc.Shutdown()`   
 
 # Data Sources
 
