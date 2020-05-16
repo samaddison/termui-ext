@@ -11,7 +11,22 @@ To install this library, run the following:
 Quick example:
 
 ```go
-    dataProvider := termui_ext.File{Path: "./termui-ext/docs/stacked_barchart_input.json"}
+package main
+
+import (
+	ui "github.com/gizak/termui/v3"
+	"log"
+	termui_ext "termui-ext"
+	"time"
+)
+
+func main() {
+	if err := ui.Init(); err != nil {
+		log.Fatalf("failed to initialize termui: %v", err)
+	}
+	defer ui.Close()
+
+	dataProvider := termui_ext.File{Path: "./docs/stacked_barchart_input.json"}
 
 	bc := termui_ext.NewStackedBarChart(dataProvider)
 	bc.Title = "Stacked Bar Chart"
@@ -24,6 +39,18 @@ Quick example:
 	ui.Render(bc)
 
 	bc.GoRefresh(5 * time.Second)
+
+	uiEvents := ui.PollEvents()
+	for {
+		e := <-uiEvents
+		switch e.ID {
+		case "q", "<C-c>":
+			return
+		case "<C-d>":
+			bc.Shutdown()
+		}
+	}
+}
 ```
 	
 As you can see, you can use the same API provided by the termui widgets, as the termui_ext widgets are essentially a wrapper around those. The only big differences are the call to GoRefresh, which configures the refresh rate, and the introduction of a data provider which needs to be passed in the constructor. 
