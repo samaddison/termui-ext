@@ -1,4 +1,4 @@
-module termui-ext
+module github.com/samaddison/termui-ext
 
 go 1.14
 
