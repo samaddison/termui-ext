@@ -9,12 +9,15 @@ type Gauge struct {
 
 func NewGaugeWithRenderer(provider DataProvider, renderer GaugeRenderer) *Gauge {
 	widgetGauge := widgets.NewGauge()
+	return NewGaugeWithExisting(widgetGauge, provider, renderer)
+}
 
+func NewGaugeWithExisting(gaugeWidget *widgets.Gauge, provider DataProvider, renderer GaugeRenderer) *Gauge {
 	gauge := Gauge{
-		Gauge: widgetGauge,
+		Gauge: gaugeWidget,
 		BaseWidget: BaseWidget{
 			DataProvider: provider,
-			Drawable:     widgetGauge,
+			Drawable:     gaugeWidget,
 		},
 	}
 	renderer.Gauge = gauge
@@ -23,8 +26,14 @@ func NewGaugeWithRenderer(provider DataProvider, renderer GaugeRenderer) *Gauge 
 	return &gauge
 }
 
-func NewGauge(provider DataProvider) *Gauge {
+func NewGaugeDefaultRenderer(provider DataProvider) *Gauge {
 	dataRenderer := GaugeRenderer{}
 	gauge := NewGaugeWithRenderer(provider, dataRenderer)
+	return gauge
+}
+
+func NewGauge2(gaugeWidget *widgets.Gauge, provider DataProvider) *Gauge {
+	dataRenderer := GaugeRenderer{}
+	gauge := NewGaugeWithExisting(gaugeWidget, provider, dataRenderer)
 	return gauge
 }

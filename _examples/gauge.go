@@ -15,7 +15,7 @@ func main() {
 
 	dataProvider := termui_ext.File{Path: "./docs/gauge_input.json"}
 
-	gauge := termui_ext.NewGauge(dataProvider)
+	gauge := termui_ext.NewGaugeDefaultRenderer(dataProvider)
 	gauge.Title = "Slim Gauge"
 	gauge.SetRect(0, 14, 50, 17)
 	gauge.BarColor = ui.ColorRed

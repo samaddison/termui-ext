@@ -1,6 +1,6 @@
 # termui-ext
 
-termui-ext is an extension of the termui library (https://github.com/gizak/termui). It provides a set of datasources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
+termui-ext is an extension of the [termui](https://github.com/gizak/termui) library. It provides a set of data sources and renderers that allow the widgets to pull the data periodically from a data source. This effectively enables a "data pull" model for the widget. Rather than the code pushing data into the widget, widgets can be configured to automatically retrieve data from a data provider.
 
 # Installation
 
@@ -61,7 +61,7 @@ The File data provider reads the JSON from a file. It is probably more of a proo
 
 You can of course create your own data provider. See the source for both the http and file providers for an example. It is actually quite simple. You can for instance create a data provider that will retrieve data from a MySQL database, a time series database like InfluxDB or any other source you can think of.
 
-# Refreshing the Data
+## Refreshing the Data
 After you create and configure a widget, you have to call the Refresh method. You can call the Refresh method directly as a goroutine:
 
 `go bc.Refresh(5 * time.Second)`
@@ -82,13 +82,13 @@ You can stop a widget at any time:
 
 `bc.Shutdown()`   
 
-# Data Sources
+## Data Sources
 
 Data Sources know where the new data source is, connect to the source and retrieve the data. Typically, data would be retrieved from an API, so all you have to do is to configure the widget with the API endpoint and let the data source handle it.
 
 
 
-# Renderers
+## Renderers
 Renderers are the components that receive the JSON from the data source, parse it and refresh the widget data with it. As such, they are specific to each of the widgets, unlike data sources that are general and can be used by any widget.
 
 Renderers are less likely to change, but you can still create your own renderer and assign it to a widget:
@@ -96,13 +96,13 @@ Renderers are less likely to change, but you can still create your own renderer 
 // Code
 
 
-# Hooks
+## Hooks
 It is unlikely however that existing APIs will return the JSON data in exactly the format required by the widget. For that purpose, Data Sources provide hooks, which you can use to transform the data into a format suitable for the widget. 
 
 Both data sources and renderers provide hooks. If you have multiple widgets of different types which might consume the same data source, it might make sense to use the data source hooks, as you will use the same data source for all the widgets, but you are unlikely to use the same renderer for multiple widget types.
 
-# Licence
-MIT
+## Licence
+[MIT](http://opensource.org/licenses/MIT)
 
 
 

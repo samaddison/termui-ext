@@ -10,8 +10,8 @@ type HTTP struct {
 	Url string
 }
 
-func (dp HTTP) PreRetrieve() {
-
+func (dp HTTP) PreRetrieve() error {
+	return nil
 }
 
 func (dp HTTP) Retrieve() (*WidgetData, error) {
@@ -32,6 +32,6 @@ func (dp HTTP) Retrieve() (*WidgetData, error) {
 	}
 }
 
-func (dp HTTP) PostRetrieve(*WidgetData, error) {
-
+func (dp HTTP) PostRetrieve(*WidgetData, error) error {
+	return nil
 }

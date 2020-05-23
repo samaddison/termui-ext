@@ -1,0 +1,121 @@
+{
+  "common": {
+    "title": {
+      "text": "Dashboard 1",
+      "style": {
+        "fg": "black",
+        "bg": "green",
+        "modifier": "bold"
+      }
+    },
+    "border": {
+      "display": true,
+      "left": true,
+      "right": true,
+      "top": true,
+      "bottom": true,
+      "style": {
+        "fg": "black",
+        "bg": "green",
+        "modifier": "bold"
+      }
+    },
+    "padding": {
+      "left": 1,
+      "right": 1,
+      "top": 1,
+      "bottom": 1
+    }
+  },
+  "widgets": [
+    {
+      "id": "widget1",
+      "type": "barchart",
+      "common": {
+        "title": {
+          "text": "Barchart 1"
+        }
+      },
+      "datasource": {
+        "type": "file",
+        "path": "/Users/samaddison/GolandProjects/termui-ext/docs/barchart_input.json"
+      }
+    },
+    {
+      "id": "widget2",
+      "type": "list",
+      "common": {
+        "title": {
+          "text": "List 1"
+        }
+      },
+      "datasource": {
+        "type": "file",
+        "path": "/Users/samaddison/GolandProjects/termui-ext/docs/list_input.json"
+      },
+      "widget_properties": [
+        {
+          "name": "wrapText",
+          "value": "true"
+        },
+        {
+          "name": "selectedRow",
+          "value": "1"
+        }
+      ]
+    }
+  ],
+  "grid": {
+    "id": "grid1",
+    "common": {
+      "title": {
+        "text": "Grid 1"
+      }
+    },
+    "items": [
+      {
+        "type": "row",
+        "ratio": 0.60,
+        "items": [
+          {
+            "type": "column",
+            "ratio": 0.50,
+            "widget": "widget1"
+          },
+          {
+            "type": "column",
+            "ratio": 0.50,
+            "widget": "widget2"
+          }
+        ]
+      },
+      {
+        "type": "row",
+        "ratio": 0.40,
+        "items": [
+          {
+            "type": "column",
+            "ratio": 0.50,
+            "widget": "widget1"
+          },
+          {
+            "type": "column",
+            "ratio": 0.50,
+            "items": [
+              {
+                "type": "row",
+                "ratio": 0.50,
+                "widget": "widget1"
+              },
+              {
+                "type": "row",
+                "ratio": 0.50,
+                "widget": "widget2"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

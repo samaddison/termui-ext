@@ -6,11 +6,27 @@ import (
 	"time"
 )
 
+type Refreshable interface {
+	Refresh(d time.Duration)
+	GoRefresh(d time.Duration)
+	GetDrawable() ui.Drawable
+	GetName() *string
+}
+
 type BaseWidget struct {
+	Name string
 	DataProvider
 	DataRenderer
 	Drawable ui.Drawable
 	quit     chan struct{}
+}
+
+func (widget *BaseWidget) GetName() *string {
+	return &widget.Name
+}
+
+func (widget *BaseWidget) GetDrawable() ui.Drawable {
+	return widget.Drawable
 }
 
 func (widget *BaseWidget) Refresh(d time.Duration) {
